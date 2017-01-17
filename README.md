@@ -69,3 +69,22 @@ CustomView Attributes를 만들기 위해res/vlues 에 다음과 같이 선언�
         }
     }
 ~~~
+### 접근성 높이기
+content descriptions // android:contentDescription 속성을 사용하거나 setContentDescription()메소드를 사용하여 등록 할 수 있다. 이는 talkBack 앱으로 시각적으로 불편한 사용자에게 음성으로 알려준다.
+focus-based navigation // 터치패드만 아닌 다른 hardware, software로의 입력도 받을 수 있어야 한다.
+no audio-only feedback // 소리로 피드백을 줄 때 소리 뿐 아니라 진동, 시각적인 피드백도 함꼐 주어야 한다.
+https://developer.android.com/training/accessibility/testing.html
+
+### accessiblility service
+- 접근성 서비스를 만들면 내 서비스를 다른앱에서 가져다 쓸 수 있고 나의 앱에서 다른 서비스를 가져다 쓸 수도 있다.
+
+### RtL로 전환하기
+https://android-developers.googleblog.com/2013/03/native-rtl-support-in-android-42.html
+- manifest의 <application> 태그안에 android:supportsRtl="true"속성을 추가해 준다.
+- minSDK 가 17이상이면 left/right 속성을 start/end속성으로 바꾸면 되고 이하이면 start/end속성을 추가해 줘야 한다.
+
+### string.xml이용하기
+- https://developer.android.com/distribute/tools/localization-checklist.html#manage-strings
+- 주석을 달아 어디서 어떻게 쓰이는 건지 명시 할 수 있고, <xliff:g>태그를 이용해 번역하면 안된다는 것을 나타 낼 수도 있다.
+- util을 이용해 날짜나 숫자 화폐 등등의 형식을 지역에 맞게 변경 시킬 수 있다.
+- values/, values-en/ ,values-fr/ 등 여러 지역에 해당하는 value폴더를 만들 수 있고 후에 그 지역 폴더가 우선권을 가진다.
