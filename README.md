@@ -69,6 +69,9 @@ CustomView Attributes를 만들기 위해res/vlues 에 다음과 같이 선언�
         }
     }
 ~~~
+
+# Lesson3
+
 ### 접근성 높이기
 content descriptions // android:contentDescription 속성을 사용하거나 setContentDescription()메소드를 사용하여 등록 할 수 있다. 이는 talkBack 앱으로 시각적으로 불편한 사용자에게 음성으로 알려준다.
 focus-based navigation // 터치패드만 아닌 다른 hardware, software로의 입력도 받을 수 있어야 한다.
@@ -88,3 +91,38 @@ https://android-developers.googleblog.com/2013/03/native-rtl-support-in-android-
 - 주석을 달아 어디서 어떻게 쓰이는 건지 명시 할 수 있고, <xliff:g>태그를 이용해 번역하면 안된다는 것을 나타 낼 수도 있다.
 - util을 이용해 날짜나 숫자 화폐 등등의 형식을 지역에 맞게 변경 시킬 수 있다.
 - values/, values-en/ ,values-fr/ 등 여러 지역에 해당하는 value폴더를 만들 수 있고 후에 그 지역 폴더가 우선권을 가진다.
+
+# Lesson4
+
+### Glide 사용하기
+이미지 로딩을 더 편하게 해 주고 이미지가 없을 경우 대체 이미지를 사용 하는 등 여러 기능이 있는 라이브러리이다.
+
+##### Gradle 추가
+compile 'com.github.bumptech.glide:glide:3.5.2'
+##### 어떻게 작동하는지 확인 해 보자. 다음은 기존 setImageResource 를 Glide를 이용해서 하는 방법이다.
+.load는 이미지를 url로 부터 가져오고 error는 만약 이미지가 없을 때 대체 이미지를 가져온다. into는 가져온 이미지를 imageview에 적용시킨다.
+~~~
+    //mIconView.setImageResource(Utility.getArtResourceForWeatherCondition(weatherId));
+
+    Glide.with(this)
+        .load(Utility.getArtUrlForWeatherCondition(getActivity(), weatherId))//Url에서 이미지를 불러오는 로컬 메소드이다.
+        .error(Utility.getArtResourceForWeatherCondition(weatherId))//local에서 이미지를 불러오는 로컬 메소드이다.
+        .into(mIconView);//imageview에 적용시킨다.
+~~~
+##### Glide로 이미지를 가져와서 largeIcon사이즈로 재 조정하기.
+~~~
+    //Bitmap largeIcon = BitmapFactory.decodeResource(resources, Utility.getArtResourceForWeatherCondition(weatherId));
+
+    Bitmap largeIcon = Glide.with(context)
+    .load(artUrl)
+    .asBitmap() // 단순 bitmap 형태로 이미지를 가져온다.
+    .error(artResourceId)
+    .into(largeIconWidth, largeIconHeight)// fix width, height값을 지정해 준다.
+    .get();
+~~~
+largeIcon의 크기는 진저브레드 이하에선 48dp 고정, 그 외에는 지정된 largeIcon 값을 사용한다.
+~~~
+    int largeIconWidth = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB
+    ? resources.getDimentionPixelSize(android.R.dimen.notification_large_icon_width)
+    : resources.getDimensionPixelSize(R.dimen.notification_large_icon_default);
+~~~
