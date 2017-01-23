@@ -126,3 +126,100 @@ largeIcon의 크기는 진저브레드 이하에선 48dp 고정, 그 외에는 �
     ? resources.getDimentionPixelSize(android.R.dimen.notification_large_icon_width)
     : resources.getDimensionPixelSize(R.dimen.notification_large_icon_default);
 ~~~
+# Lesson5
+##### Polling 과 pushing
+Polling 은 device가 정기적으로 서버에 변화가 있는지 없는지 확인하는 것.
+Pushing은 서버가 변화가 있으면 device를 call하는것
+pushing에는 두가지 방법이 있는데 한가지는 tickle이라는 작은 메세지를 보내는 것이고 두번째는 업데이트 내용을 보내고 중간단계를 없애는 것이다.
+pushing을 사용하면 sync와 인터넷도 적게 사용할 것이다.
+##### GCM사용하기 (Firebase Cloud Messaging)
+Google Cloud Messaging의 새 버전인 Firebase Cloud Massaging을 이용하게 바뀌었다... 자세한 방법은 http://blog.naver.com/PostView.nhn?blogId=cosmosjs&logNo=220739141098&categoryNo=0&parentCategoryNo=56&viewDate=&currentPage=1&postListTopCurrentPage=1&from=search 참고
+##### Manifest추가하기
+<uses-permission android:name="android.permission.IINTERNET"/>추가하기
+<uses-permission android:name="android.permission.WAKELOCK"/>추가하기 - 메세지를 받았을 때 계속 슬립시킬건지 정할 수 있다. 여기선 활용화
+<uses-permission android:name="com.google.android.c2dm.permission.RECEIVER"/> 메세지 받기 활성화
+<permission adnroid:name="com.example.android.sunshine.app.permission.C2D_MESSAGE" android:protectionLevel="signature"/>
+<uses-permission android:name="com.example.android.sunshine.app.permission.C2D_MESSAGE"/> 다른앱이 우리에게 오는 메세지를 받을 수 없게 한다.
+그 외에 네개의 클레스를 추가 해야 한다.https://classroom.udacity.com/courses/ud855/lessons/3995738628/concepts/59769187270923# 참조
+##### Registeration
+서비스를 등록해야 한다. https://classroom.udacity.com/courses/ud855/lessons/3995738628/concepts/59769187290923# 참조
+# Lesson6
+##### Material Design
+참고 http://kr.besuccess.com/2015/08/material-design/
+메테리얼 디자인은 구글에서 내놓은 디자인 가이드라인이다.
+##### Color
+색과 빈공간을 더 효율적으로 사용하자
+색상을 선택할 때 메테리얼 디자인을 위해 색상팔레트를 제공한다
+100은 밝은 700~800은 어두운 500은 적당. A000는 강조색상
+##### ActionBar to Toolbar
+5.0은 새로운 툴바 위젯이 도입되었다. 하이라키가 나머지 색조와 잘 어우러지고 스크롤에 반응한다.요즘은 두개이상의 툴바를 사용한다.
+스타일을 @style/Theme.AppCompat.Light.NoActionBar 로 바꾸어야 한다.
+라이트 팝업테마를 반드시 사용해야 한다.
+기본 바탕은 투명이다.
+그 뒤 레이아웃에 툴바를 추가한다.
+setSupportActionBar를 이용하여 툴바를 액션바처럼 이용하게 액티비티를 설정 해 준다.
+getSupportActionBar로 후에 가져와 속성을 바꿀 수 있다.
+툴바안에 ImageView를 넣어서 로고를 넣을 수 있는데 유용하다.
+##### DetailView
+메티리얼 디자인에 따라 세로로 16dp, 가로로 32dp의 공간이 추가 되어 잇다.
+그리드 레이아웃을 사용하면 가로 크기에 따라 자동조정 되고 각 뷰에서 제약 조건을걸 수도 있다(자체 layout_gravity를 이용한다).
+열의 개수를 columnCount 속성을 이용해 설정할 수 있다(자동으로 넣는다).
+순서대로 잇을 때 그 중 한 아이콘의 위치를 바꾸면 그 뒤에 있는 view들은 자동으로 그 뒤에 정렬된다.
+한 view를 두 열이 차지하도록 변경 할 수도 있다. weight를 이용해 벨런스를 잡자.
+
+##### GridView 사용하기
+설정을 위해 엡에 GridLayout 특정 XML속성을 정의하고 res-auto scheme를 추가한다.https://classroom.udacity.com/courses/ud855/lessons/3940839262/concepts/43340102820923#
+빈 공간을 넣을 때는 space 뷰를 사용하자
+ImageView 의 adjustViewBounds를 이용하면 이미지의 크기를 제한 할 수 있다. tools:src속성을 이용하여 에디터 도구에서 이미지를 보여준다.
+##### 그림자 그리기
+layout Language에 elevation이라는 파라미터를 사용 할 수 있다. z값을 주어 높게주면 더 크고 부드러운 그림자를 가진다. 뒤의 뷰를 가릴 수 있다.
+Elevation android:elevation=@dimen/appbar_elevation"
+##### 작은화면 -> 큰화면
+큰화면으로 바꿀때 내용크기가 같다면 좌우 공간의 크기가 커져야 한다. values/sw600dp-port/dimens.xml 에 extra-padding을 정해 놓자. 이는 가로가 600dp이상일 때 참고한다는 뜻이다. 속성은 android:paddingLeft="@dimen/extra-padding" 같이 이용하면 된다.
+##### 같은 화면 재사용 할 때
+<include>를 이용하자.
+##### CardView
+elevation이 잘 안먹힐 때가 있다. CardView를 이용하자
+##### Scrolling in Parallel
+HONEYCOMB 이상이라면 Recycler view에 scroll listener를 추가해 준다. @TargetApp(Build.VERSION_CODES.HONEYCOMB)이라는 어노테이션을 쓰면 된다. x,y 변화량을 반환한다 -> 그에따라 반응하게 만든다.
+##### 이동 애니메이션화
+어떻게 움직일지를 정하는<transitionSet>을 담는 transition resource를 만들어야 한다.
+~~~
+<fade>
+    <targets>
+        <target android:excludeId>//excludeId는 이 아이디해당 빼고 모든 뷰 포함.
+    <targets>
+<fade>
+이런식으로 어떤걸 사라지게 할지 타겟을 정할 수 있다.
+~~~    
+후에 appTheme에 추가하여 실행하자.
+##### Shared element transition
+서로다른 엑티비티에서 공유하는 view를 자연스럽게 변하도록 해 주는 방법
+두 activity에 어떤 view가 공통되는지 명시한다. 두 layout에 transitionName을 추가한다.
+그리고 transition 시작점에 있는 view들에게도 setTransitionName을 이용해 이름을 추가한다.
+supportPostponeEnterTransition을 이용하여 다른 layout이 완료될 때 까지 기다릴 수 있다.
+후에 supportStartPostponeEnterTransition()이 준비가 끝나면 알려준다.
+##### Scrolling the AppBar
+AppBar가 어떻게 움직이는지 배운다.
+CoordinatorLayout
+기본적으로 frameLayout과 비슷하다. 내부 view는 gravity로 조정가능하다. parentView에 따라 위아래좌우에 배치될 수 있다.
+layout을 변경할 수 있는 behavior classes를 지원한다.
+AppBarLayout은 특별한 종류의 linear layout으로 CoordinatorLayout과 같이 동작하여 다양한 종류의 toolbar 패턴을 그 밑의 CoordinatorLayout에서 스크롤 하는동안 형태를 바꾼다. 이때 AppBar는 어떤 행동을 할지 layout scroll flag를 입력해둬야 한다. 아래에 있는 CoordinatorLayout은 그 동안 AppBar Scrolling view Behavior를 받는다(밑에 레이아웃도 어떻게 움직여야하는지 알아야 하는듯)
+AppBar에 Collapsing ToolbarLayout을 추가 할 수 있다.(스크롤 내리면 먼저 사라지는 부분)
+가장 좋은점은 XML layout만 이용하고 코드를 건들지 않아도 된다.
+##### Adding Elevation
+Appbar가 움직일 때 그림자를 드리우자
+RecyclerView에 스크롤리스너 onScrollListener를 달 수 있다.
+그리고 appbar.setElevation()을 이용하여 엘레베이션을 달 수 있다.
+# Lesson8
+##### PlaceAPI
+사용하기 위해 먼저 API Key를 받고 매니페스트에 등록 해 준다.https://console.developers.google.com/flows/enableapi?apiid=placesandroid&keyType=CLIENT_SIDE_ANDROID
+FCM을 onActivity 시점에서 sdk사용이 가능한지 확인하고 불가능하다면 placePicker을 실행하는 위젯을 만들고 불가능할 경우 만들지 않는다.
+현재표시를 나타내는 이미지를 사용하는데 이미지 아이콘은 작다. 하지만 그걸 감싸는 frameLayout의 크기는 크다. 그래서 frameLayout에 클릭리스너를 달자
+##### placeAPI 사용
+gradle 추가
+compile 'com.google.android.gms:play-services-location:7.5.0'
+Manifest추가
+<uses-permission adnroid:name="android.permission.ACCESS_FINE_LOCATION"/>
+onActivityResult에서 원하는 intent인지 확인하고 preference를 바꾼다.
+받은 정보가 주소인지 좌표인지 알 수가 없다. 하지만 위도, 경도를 꼭 가지고 있기 때문에 이를 이용한다.
